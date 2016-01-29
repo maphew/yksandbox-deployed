@@ -1,0 +1,11 @@
+# uhm   elevation colour mapping
+# fpv   fix perspective (from kinect distortion)
+# rer   35 to 60cm above ground plane for rain clouds to be active
+# evr   0.2cm/s evaporation rate
+export PATH=${PATH}:$HOME/sandbox/bin
+
+SARndbox -uhm -fpv \
+-rer 35 60 \
+-loadInputGraph $HOME/sandbox/etc/default.inputgraph \
+$@
+
