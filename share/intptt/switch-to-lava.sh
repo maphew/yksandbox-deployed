@@ -1,1 +1,1 @@
-cp SurfaceAddWaterColor-Lava.fs SurfaceAddWaterColor.fs
+cp SurfaceAddWaterColor-Lava.fs ../SARndbox-1.6/Shaders/SurfaceAddWaterColor.fs
