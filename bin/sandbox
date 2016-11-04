@@ -25,8 +25,8 @@ function open_pipe {
 
 function control {
     # control a running SARndbox
-    echo passing "$*" to $SB_FIFO 
-    echo "$*" > $SB_FIFO
+    echo passing \"${@:2}\" to $SB_FIFO 
+    echo "${@:2}" > $SB_FIFO
     }
 
 function stop {
@@ -44,4 +44,5 @@ $1 $*
 
 
 # ---- Scrapbook -----
+# http://stackoverflow.com/questions/9057387/process-all-arguments-except-the-first-one-in-a-bash-script
 #
