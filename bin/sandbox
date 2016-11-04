@@ -2,10 +2,46 @@
 # fpv   fix perspective (from kinect distortion)
 # rer   35 to 60cm above ground plane for rain clouds to be active
 # evr   0.2cm/s evaporation rate
-export PATH=${PATH}:$HOME/sandbox/bin
+# cp    path to control pipe for changing parameters while running 
+#
+SANDBOX=$HOME/sandbox
+export PATH=${PATH}:$SANDBOX/bin
+SB_FIFO=$SANDBOX/etc/Control.fifo    # control pipe
 
-SARndbox -uhm -fpv \
--rer 35 60 \
--loadInputGraph $HOME/sandbox/etc/default.inputgraph \
-$@
+function start {
+    SARndbox -uhm -fpv \
+    -rer 35 60 \
+    -loadInputGraph $HOME/sandbox/etc/default.inputgraph \
+    -cp $SANDBOX/etc/Control.fifo \
+    $@ & echo $! >>/tmp/sandbox.pid
+}
 
+function open_pipe {
+    # create a control pipe
+    if [ ! -p  $SB_FIFO ]; then  
+        mkfifo  $SB_FIFO        
+    fi
+    } 
+
+function control {
+    # control a running SARndbox
+    echo passing "$*" to $SB_FIFO 
+    echo "$*" > $SB_FIFO
+    }
+
+function stop {
+    killall SARndbox
+    }
+
+if [ "$1" == "" ]; then
+  echo -e "\nUsage: `basename $0` [start | stop | control {parameters}]\n"
+  exit 0
+fi
+
+# --- Main ---
+open_pipe
+$1 $*
+
+
+# ---- Scrapbook -----
+#
